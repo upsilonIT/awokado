@@ -7,26 +7,26 @@ class Resource {
     this.apiInstance = apiInstance;
   }
 
-  doDelete(url) {
+  doRequest(options) {
     const { apiInstance } = this;
 
-    return apiInstance.fetcher({ method: 'DELETE', url })
+    return apiInstance.fetcher(options);
+  }
+
+  doDelete(url) {
+    return this.doRequest({ method: 'DELETE', url })
   }
 
   doGet(url) {
-    return this.apiInstance.fetcher({ url });
+    return this.doRequest({ url });
   }
 
   doPatch(url, data) {
-    const { apiInstance } = this;
-
-    return apiInstance.fetcher({ method: 'PATCH', url, data });
+    return this.doRequest({ method: 'PATCH', url, data });
   }
 
   doPost(url, data) {
-    const { apiInstance } = this;
-
-    return apiInstance.fetcher({ method: 'POST', url, data });
+    return this.doRequest({ method: 'POST', url, data });
   }
 }
 
