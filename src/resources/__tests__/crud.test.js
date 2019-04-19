@@ -2,17 +2,10 @@ import CRUDResource from '../crud';
 
 const queryParamsString = 'a=1&b=2';
 const serializer = {
-  queryParamsSerializer: {
-    serialize: () => queryParamsString,
-  },
-  attributesSerializer: {
-    serialize: x => x,
-  },
+  serialize: () => queryParamsString,
 };
 const emptySerializer = {
-  queryParamsSerializer: {
-    serialize: () => '',
-  },
+  serialize: () => '',
 };
 
 describe('findById', () => {

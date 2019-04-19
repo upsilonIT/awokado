@@ -27,8 +27,7 @@ class CRUDResource extends Resource {
 
   query(query) {
     const { apiInstance, endpoint, serializer } = this;
-    const { queryParamsSerializer } = serializer;
-    const queryParams = queryParamsSerializer.serialize(query);
+    const queryParams = serializer.serialize(query);
     const queryParamsStr = decodeURIComponent(queryParams.toString());
     const url = `${endpoint}${addParams(queryParamsStr)}`;
 
