@@ -6,7 +6,7 @@
   "scripts": {
     "commit": "git-cz",
     "lint": "eslint src",
-    "test": "jest src"
+    "test": "yarn lint && jest src"
   },
   "keywords": [
     "awokado"
