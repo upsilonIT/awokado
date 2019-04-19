@@ -49,7 +49,7 @@ class CRUDResource extends Resource {
     const { endpoint } = this;
     const body = this.buildResourceRequestBody(attributes);
 
-    return this.doPost(endpoint, body);
+    return this.doPost(endpoint, body).then(responseJson => ({ payload: responseJson }));
   }
 
   bulkCreate(...args) {
@@ -61,7 +61,7 @@ class CRUDResource extends Resource {
     const url = `${endpoint}/${id}`;
 
     return this.doDelete(url)
-      .then(responseJson => ({ payload: responseJson }));;
+      .then(responseJson => ({ payload: responseJson }));
   }
 
   buildResourceRequestBody(attributes) {
