@@ -22,7 +22,7 @@ class CRUDResource extends Resource {
 
     const url = `${endpoint}/${id}${addParams(params.toString())}`;
 
-    return apiInstance.fetcher({ url }).then(({ data }) => ({ payload: data }));
+    return apiInstance.fetcher({ url }).then(responseJson => ({ payload: responseJson }));
   }
 
   query(query) {
@@ -31,7 +31,7 @@ class CRUDResource extends Resource {
     const queryParamsStr = decodeURIComponent(queryParams.toString());
     const url = `${endpoint}${addParams(queryParamsStr)}`;
 
-    return apiInstance.fetcher({ url }).then(({ data }) => data);
+    return apiInstance.fetcher({ url });
   }
 
   update(id, attributes) {
@@ -46,8 +46,7 @@ class CRUDResource extends Resource {
         method: 'PATCH',
         url: endpoint,
         data: this.buildResourceRequestBody(items),
-      })
-      .then(({ data }) => data);
+      });
   }
 
   create(attributes) {
@@ -59,7 +58,7 @@ class CRUDResource extends Resource {
         url: endpoint,
         data: this.buildResourceRequestBody(attributes),
       })
-      .then(({ data }) => ({ payload: data }));
+      .then(responseJson => ({ payload: responseJson }));
   }
 
   bulkCreate(...args) {
@@ -74,7 +73,7 @@ class CRUDResource extends Resource {
         method: 'DELETE',
         url: `${endpoint}/${id}`,
       })
-      .then(({ data }) => ({ payload: data }));
+      .then(responseJson => ({ payload: responseJson }));
   }
 
   buildResourceRequestBody(attributes) {

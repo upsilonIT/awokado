@@ -13,10 +13,9 @@ describe('findById', () => {
     const id = '123';
     const endpoint = '/res';
     const payload = { items: [] };
-    const response = { data: payload };
     const resource = new CRUDResource({ endpoint, serializer });
 
-    const fetcher = jest.fn().mockResolvedValue(response);
+    const fetcher = jest.fn().mockResolvedValue(payload);
     const apiInstance = { fetcher };
 
     resource.setApiInstance(apiInstance);
@@ -34,10 +33,9 @@ describe('findById', () => {
     const options = { include: 'brands' };
     const endpoint = '/res';
     const payload = { items: [] };
-    const response = { data: payload };
     const resource = new CRUDResource({ endpoint, serializer });
 
-    const fetcher = jest.fn().mockResolvedValue(response);
+    const fetcher = jest.fn().mockResolvedValue(payload);
     const apiInstance = { fetcher };
 
     resource.setApiInstance(apiInstance);
@@ -55,11 +53,10 @@ describe('query', () => {
   test('should delegate call to fetcher', () => {
     const queryObject = { name: '123' };
     const endpoint = '/res';
-    const data = { payload: '1' };
-    const response = { data };
+    const payload = { payload: '1' };
     const resource = new CRUDResource({ endpoint, serializer });
 
-    const fetcher = jest.fn().mockResolvedValue(response);
+    const fetcher = jest.fn().mockResolvedValue(payload);
     const apiInstance = { fetcher };
 
     resource.setApiInstance(apiInstance);
@@ -68,21 +65,20 @@ describe('query', () => {
       expect(fetcher).toHaveBeenCalledWith({
         url: `${endpoint}?${queryParamsString}`,
       });
-      expect(resResponse).toEqual(data);
+      expect(resResponse).toEqual(payload);
     });
   });
 
   test('should call fetcher without param', () => {
     const queryObject = { name: '123' };
     const endpoint = '/res';
-    const data = { payload: '1' };
-    const response = { data };
+    const payload = { payload: '1' };
     const resource = new CRUDResource({
       endpoint,
       serializer: emptySerializer,
     });
 
-    const fetcher = jest.fn().mockResolvedValue(response);
+    const fetcher = jest.fn().mockResolvedValue(payload);
     const apiInstance = { fetcher };
 
     resource.setApiInstance(apiInstance);
@@ -91,7 +87,7 @@ describe('query', () => {
       expect(fetcher).toHaveBeenCalledWith({
         url: `${endpoint}`,
       });
-      expect(resResponse).toEqual(data);
+      expect(resResponse).toEqual(payload);
     });
   });
 });
@@ -104,8 +100,7 @@ describe('update', () => {
     const id = '1';
     const attrs = { name: '123' };
     const payload = { any: 'data' };
-    const response = { payload };
-    const fetcher = jest.fn().mockResolvedValue({ data: response });
+    const fetcher = jest.fn().mockResolvedValue(payload);
     const apiInstance = { fetcher };
 
     resource.setApiInstance(apiInstance);
@@ -122,7 +117,7 @@ describe('update', () => {
         },
       }),
     );
-    expect(result).toEqual(response);
+    expect(result).toEqual(payload);
   });
 });
 
@@ -132,8 +127,8 @@ describe('bulkUpdate', () => {
     const resourceName = 'name';
     const resource = new CRUDResource({ endpoint, resourceName, serializer });
     const items = [{ id: 1, name: 'John' }, { id: 2, name: 'Andrew' }];
-    const data = { any: 'data' };
-    const fetcher = jest.fn().mockResolvedValue({ data });
+    const payload = { any: 'data' };
+    const fetcher = jest.fn().mockResolvedValue(payload);
     const apiInstance = { fetcher };
 
     resource.setApiInstance(apiInstance);
@@ -150,7 +145,7 @@ describe('bulkUpdate', () => {
         },
       }),
     );
-    expect(result).toEqual(data);
+    expect(result).toEqual(payload);
   });
 });
 
@@ -160,8 +155,8 @@ describe('delete', () => {
     const resourceName = 'name';
     const resource = new CRUDResource({ endpoint, resourceName, serializer });
     const id = '1';
-    const data = { any: 'data' };
-    const fetcher = jest.fn().mockResolvedValue({ data });
+    const payload = { any: 'data' };
+    const fetcher = jest.fn().mockResolvedValue(payload);
     const apiInstance = { fetcher };
 
     resource.setApiInstance(apiInstance);
@@ -176,7 +171,7 @@ describe('delete', () => {
         url: `${endpoint}/${id}`,
       }),
     );
-    expect(result).toEqual({ payload: data });
+    expect(result).toEqual({ payload });
   });
 });
 
