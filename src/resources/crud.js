@@ -12,7 +12,7 @@ class CRUDResource extends Resource {
   }
 
   findById(id, options = {}) {
-    const { apiInstance, endpoint } = this;
+    const { endpoint } = this;
     const { include } = options;
     const params = new URLSearchParams();
 
@@ -22,16 +22,16 @@ class CRUDResource extends Resource {
 
     const url = `${endpoint}/${id}${addParams(params.toString())}`;
 
-    return apiInstance.fetcher({ url }).then(responseJson => ({ payload: responseJson }));
+    return this.doGet(url).then(responseJson => ({ payload: responseJson }));
   }
 
   query(query) {
-    const { apiInstance, endpoint, serializer } = this;
+    const { endpoint, serializer } = this;
     const queryParams = serializer.serialize(query);
     const queryParamsStr = decodeURIComponent(queryParams.toString());
     const url = `${endpoint}${addParams(queryParamsStr)}`;
 
-    return apiInstance.fetcher({ url });
+    return this.doGet(url);
   }
 
   update(id, attributes) {
@@ -39,26 +39,17 @@ class CRUDResource extends Resource {
   }
 
   bulkUpdate(items) {
-    const { apiInstance, endpoint } = this;
+    const { endpoint } = this;
+    const body = this.buildResourceRequestBody(items);
 
-    return apiInstance
-      .fetcher({
-        method: 'PATCH',
-        url: endpoint,
-        data: this.buildResourceRequestBody(items),
-      });
+    return this.doPatch(endpoint, body);
   }
 
   create(attributes) {
-    const { apiInstance, endpoint } = this;
+    const { endpoint } = this;
+    const body = this.buildResourceRequestBody(attributes);
 
-    return apiInstance
-      .fetcher({
-        method: 'POST',
-        url: endpoint,
-        data: this.buildResourceRequestBody(attributes),
-      })
-      .then(responseJson => ({ payload: responseJson }));
+    return this.doPost(endpoint, body);
   }
 
   bulkCreate(...args) {
@@ -66,14 +57,11 @@ class CRUDResource extends Resource {
   }
 
   delete(id) {
-    const { apiInstance, endpoint } = this;
+    const { endpoint } = this;
+    const url = `${endpoint}/${id}`;
 
-    return apiInstance
-      .fetcher({
-        method: 'DELETE',
-        url: `${endpoint}/${id}`,
-      })
-      .then(responseJson => ({ payload: responseJson }));
+    return this.doDelete(url)
+      .then(responseJson => ({ payload: responseJson }));;
   }
 
   buildResourceRequestBody(attributes) {
