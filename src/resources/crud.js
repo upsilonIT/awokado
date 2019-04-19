@@ -79,15 +79,9 @@ class CRUDResource extends Resource {
   }
 
   buildResourceRequestBody(attributes) {
-    const { resourceName, serializer } = this;
-    const { attributesSerializer } = serializer;
-    const serializedAttributes = Array.isArray(attributes)
-      ? attributes.map(attributesSerializer.serialize)
-      : attributesSerializer.serialize(attributes);
+    const { resourceName } = this;
 
-    return {
-      [resourceName]: serializedAttributes,
-    };
+    return { [resourceName]: attributes };
   }
 
   getResourceItems(response) {
