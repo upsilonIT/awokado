@@ -13,17 +13,12 @@ describe('findById', () => {
     const id = '123';
     const endpoint = '/res';
     const payload = { items: [] };
-    const resource = new CRUDResource({ endpoint, serializer });
-
-    const fetcher = jest.fn().mockResolvedValue(payload);
-    const apiInstance = { fetcher };
-
-    resource.setApiInstance(apiInstance);
+    const doGet = jest.fn().mockResolvedValue(payload);
+    const httpAdapter = { doGet };
+    const resource = new CRUDResource({ endpoint, httpAdapter, serializer });
 
     return resource.findById(id).then(resResponse => {
-      expect(fetcher).toHaveBeenCalledWith({
-        url: `${endpoint}/${id}`,
-      });
+      expect(doGet).toHaveBeenCalledWith(`${endpoint}/${id}`);
       expect(resResponse).toEqual({ payload });
     });
   });
@@ -33,17 +28,12 @@ describe('findById', () => {
     const options = { include: 'brands' };
     const endpoint = '/res';
     const payload = { items: [] };
-    const resource = new CRUDResource({ endpoint, serializer });
-
-    const fetcher = jest.fn().mockResolvedValue(payload);
-    const apiInstance = { fetcher };
-
-    resource.setApiInstance(apiInstance);
+    const doGet = jest.fn().mockResolvedValue(payload);
+    const httpAdapter = { doGet };
+    const resource = new CRUDResource({ endpoint, httpAdapter, serializer });
 
     return resource.findById(id, options).then(resResponse => {
-      expect(fetcher).toHaveBeenCalledWith({
-        url: `${endpoint}/${id}?include=brands`,
-      });
+      expect(doGet).toHaveBeenCalledWith(`${endpoint}/${id}?include=brands`);
       expect(resResponse).toEqual({ payload });
     });
   });
@@ -54,17 +44,12 @@ describe('query', () => {
     const queryObject = { name: '123' };
     const endpoint = '/res';
     const payload = { payload: '1' };
-    const resource = new CRUDResource({ endpoint, serializer });
-
-    const fetcher = jest.fn().mockResolvedValue(payload);
-    const apiInstance = { fetcher };
-
-    resource.setApiInstance(apiInstance);
+    const doGet = jest.fn().mockResolvedValue(payload);
+    const httpAdapter = { doGet };
+    const resource = new CRUDResource({ endpoint, httpAdapter, serializer });
 
     return resource.query(queryObject).then(resResponse => {
-      expect(fetcher).toHaveBeenCalledWith({
-        url: `${endpoint}?${queryParamsString}`,
-      });
+      expect(doGet).toHaveBeenCalledWith(`${endpoint}?${queryParamsString}`);
       expect(resResponse).toEqual(payload);
     });
   });
@@ -73,20 +58,16 @@ describe('query', () => {
     const queryObject = { name: '123' };
     const endpoint = '/res';
     const payload = { payload: '1' };
+    const doGet = jest.fn().mockResolvedValue(payload);
+    const httpAdapter = { doGet };
     const resource = new CRUDResource({
       endpoint,
+      httpAdapter,
       serializer: emptySerializer,
     });
 
-    const fetcher = jest.fn().mockResolvedValue(payload);
-    const apiInstance = { fetcher };
-
-    resource.setApiInstance(apiInstance);
-
     return resource.query(queryObject).then(resResponse => {
-      expect(fetcher).toHaveBeenCalledWith({
-        url: `${endpoint}`,
-      });
+      expect(doGet).toHaveBeenCalledWith(`${endpoint}`);
       expect(resResponse).toEqual(payload);
     });
   });
@@ -96,27 +77,21 @@ describe('update', () => {
   test('should delegate call to fetcher', async () => {
     const endpoint = '/point';
     const resourceName = 'name';
-    const resource = new CRUDResource({ endpoint, resourceName, serializer });
     const id = '1';
     const attrs = { name: '123' };
     const payload = { any: 'data' };
-    const fetcher = jest.fn().mockResolvedValue(payload);
-    const apiInstance = { fetcher };
+    const doPatch = jest.fn().mockResolvedValue(payload);
+    const httpAdapter = { doPatch };
+    const resource = new CRUDResource({ endpoint, httpAdapter, resourceName, serializer });
 
-    resource.setApiInstance(apiInstance);
-    expect(fetcher).toHaveBeenCalledTimes(0);
+    expect(doPatch).toHaveBeenCalledTimes(0);
 
     const result = await resource.update(id, attrs);
 
-    expect(fetcher).toHaveBeenCalledTimes(1);
-    expect(fetcher).toHaveBeenCalledWith(
-      expect.objectContaining({
-        url: endpoint,
-        data: {
-          [resourceName]: [{ id, ...attrs }],
-        },
-      }),
-    );
+    expect(doPatch).toHaveBeenCalledTimes(1);
+    expect(doPatch).toHaveBeenCalledWith(endpoint, {
+      [resourceName]: [{ id, ...attrs }],
+    });
     expect(result).toEqual(payload);
   });
 });
@@ -125,26 +100,20 @@ describe('bulkUpdate', () => {
   test('should delegate call to fetcher', async () => {
     const endpoint = '/point';
     const resourceName = 'name';
-    const resource = new CRUDResource({ endpoint, resourceName, serializer });
     const items = [{ id: 1, name: 'John' }, { id: 2, name: 'Andrew' }];
     const payload = { any: 'data' };
-    const fetcher = jest.fn().mockResolvedValue(payload);
-    const apiInstance = { fetcher };
+    const doPatch = jest.fn().mockResolvedValue(payload);
+    const httpAdapter = { doPatch };
+    const resource = new CRUDResource({ endpoint, httpAdapter, resourceName, serializer });
 
-    resource.setApiInstance(apiInstance);
-    expect(fetcher).toHaveBeenCalledTimes(0);
+    expect(doPatch).toHaveBeenCalledTimes(0);
 
     const result = await resource.bulkUpdate(items);
 
-    expect(fetcher).toHaveBeenCalledTimes(1);
-    expect(fetcher).toHaveBeenCalledWith(
-      expect.objectContaining({
-        url: endpoint,
-        data: {
-          [resourceName]: items,
-        },
-      }),
-    );
+    expect(doPatch).toHaveBeenCalledTimes(1);
+    expect(doPatch).toHaveBeenCalledWith(endpoint, {
+      [resourceName]: items,
+    });
     expect(result).toEqual(payload);
   });
 });
@@ -153,24 +122,18 @@ describe('delete', () => {
   test('should delegate call to fetcher', async () => {
     const endpoint = '/point';
     const resourceName = 'name';
-    const resource = new CRUDResource({ endpoint, resourceName, serializer });
     const id = '1';
     const payload = { any: 'data' };
-    const fetcher = jest.fn().mockResolvedValue(payload);
-    const apiInstance = { fetcher };
+    const doDelete = jest.fn().mockResolvedValue(payload);
+    const httpAdapter = { doDelete };
+    const resource = new CRUDResource({ endpoint, httpAdapter, resourceName, serializer });
 
-    resource.setApiInstance(apiInstance);
-    expect(fetcher).toHaveBeenCalledTimes(0);
+    expect(doDelete).toHaveBeenCalledTimes(0);
 
     const result = await resource.delete(id);
 
-    expect(fetcher).toHaveBeenCalledTimes(1);
-    expect(fetcher).toHaveBeenCalledWith(
-      expect.objectContaining({
-        method: 'DELETE',
-        url: `${endpoint}/${id}`,
-      }),
-    );
+    expect(doDelete).toHaveBeenCalledTimes(1);
+    expect(doDelete).toHaveBeenCalledWith(`${endpoint}/${id}`);
     expect(result).toEqual({ payload });
   });
 });

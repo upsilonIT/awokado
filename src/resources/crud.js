@@ -3,16 +3,17 @@ import Resource from './base';
 const addParams = string => string ? `?${string}` : string;
 
 class CRUDResource extends Resource {
-  constructor({ resourceName, endpoint, serializer }) {
+  constructor({ endpoint, httpAdapter, resourceName, serializer }) {
     super();
 
-    this.resourceName = resourceName;
     this.endpoint = endpoint;
+    this.httpAdapter = httpAdapter;
+    this.resourceName = resourceName;
     this.serializer = serializer;
   }
 
   findById(id, options = {}) {
-    const { endpoint } = this;
+    const { endpoint, httpAdapter } = this;
     const { include } = options;
     const params = new URLSearchParams();
 
@@ -22,16 +23,16 @@ class CRUDResource extends Resource {
 
     const url = `${endpoint}/${id}${addParams(params.toString())}`;
 
-    return this.doGet(url).then(responseJson => ({ payload: responseJson }));
+    return httpAdapter.doGet(url).then(responseJson => ({ payload: responseJson }));
   }
 
   query(query) {
-    const { endpoint, serializer } = this;
+    const { endpoint, httpAdapter, serializer } = this;
     const queryParams = serializer.serialize(query);
     const queryParamsStr = decodeURIComponent(queryParams.toString());
     const url = `${endpoint}${addParams(queryParamsStr)}`;
 
-    return this.doGet(url);
+    return httpAdapter.doGet(url);
   }
 
   update(id, attributes) {
@@ -39,17 +40,17 @@ class CRUDResource extends Resource {
   }
 
   bulkUpdate(items) {
-    const { endpoint } = this;
+    const { endpoint, httpAdapter } = this;
     const body = this.buildResourceRequestBody(items);
 
-    return this.doPatch(endpoint, body);
+    return httpAdapter.doPatch(endpoint, body);
   }
 
   create(attributes) {
-    const { endpoint } = this;
+    const { endpoint, httpAdapter } = this;
     const body = this.buildResourceRequestBody(attributes);
 
-    return this.doPost(endpoint, body).then(responseJson => ({ payload: responseJson }));
+    return httpAdapter.doPost(endpoint, body).then(responseJson => ({ payload: responseJson }));
   }
 
   bulkCreate(...args) {
@@ -57,10 +58,10 @@ class CRUDResource extends Resource {
   }
 
   delete(id) {
-    const { endpoint } = this;
+    const { endpoint, httpAdapter } = this;
     const url = `${endpoint}/${id}`;
 
-    return this.doDelete(url)
+    return httpAdapter.doDelete(url)
       .then(responseJson => ({ payload: responseJson }));
   }
 
