@@ -1,1 +1,1 @@
-export { default as Resource } from './resources/base';
+export { default as Resource } from "./resources/base";

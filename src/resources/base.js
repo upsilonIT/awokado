@@ -1,4 +1,4 @@
-const addParams = string => string ? `?${string}` : string;
+const addParams = string => (string ? `?${string}` : string);
 
 class Resource {
   constructor({ endpoint, httpAdapter, resourceName, querySerializer }) {
@@ -14,12 +14,14 @@ class Resource {
     const params = new URLSearchParams();
 
     if (include) {
-      params.set('include', include);
+      params.set("include", include);
     }
 
     const url = `${endpoint}/${id}${addParams(params.toString())}`;
 
-    return httpAdapter.doGet(url).then(responseJson => ({ payload: responseJson }));
+    return httpAdapter
+      .doGet(url)
+      .then(responseJson => ({ payload: responseJson }));
   }
 
   query(query) {
@@ -46,7 +48,9 @@ class Resource {
     const { endpoint, httpAdapter } = this;
     const body = this.buildResourceRequestBody(attributes);
 
-    return httpAdapter.doPost(endpoint, body).then(responseJson => ({ payload: responseJson }));
+    return httpAdapter
+      .doPost(endpoint, body)
+      .then(responseJson => ({ payload: responseJson }));
   }
 
   bulkCreate(...args) {
@@ -57,7 +61,8 @@ class Resource {
     const { endpoint, httpAdapter } = this;
     const url = `${endpoint}/${id}`;
 
-    return httpAdapter.doDelete(url)
+    return httpAdapter
+      .doDelete(url)
       .then(responseJson => ({ payload: responseJson }));
   }
 

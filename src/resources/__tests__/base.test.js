@@ -1,17 +1,17 @@
-import Resource from '../base';
+import Resource from "../base";
 
-const queryParamsString = 'a=1&b=2';
+const queryParamsString = "a=1&b=2";
 const querySerializer = {
-  serialize: () => queryParamsString,
+  serialize: () => queryParamsString
 };
 const emptySerializer = {
-  serialize: () => '',
+  serialize: () => ""
 };
 
-describe('findById', () => {
-  test('should delegate call to fetcher', () => {
-    const id = '123';
-    const endpoint = '/res';
+describe("findById", () => {
+  test("should delegate call to fetcher", () => {
+    const id = "123";
+    const endpoint = "/res";
     const payload = { items: [] };
     const doGet = jest.fn().mockResolvedValue(payload);
     const httpAdapter = { doGet };
@@ -23,10 +23,10 @@ describe('findById', () => {
     });
   });
 
-  test('should delegate call to fetcher with include parameter', () => {
-    const id = '123';
-    const options = { include: 'brands' };
-    const endpoint = '/res';
+  test("should delegate call to fetcher with include parameter", () => {
+    const id = "123";
+    const options = { include: "brands" };
+    const endpoint = "/res";
     const payload = { items: [] };
     const doGet = jest.fn().mockResolvedValue(payload);
     const httpAdapter = { doGet };
@@ -39,11 +39,11 @@ describe('findById', () => {
   });
 });
 
-describe('query', () => {
-  test('should delegate call to fetcher', () => {
-    const queryObject = { name: '123' };
-    const endpoint = '/res';
-    const payload = { payload: '1' };
+describe("query", () => {
+  test("should delegate call to fetcher", () => {
+    const queryObject = { name: "123" };
+    const endpoint = "/res";
+    const payload = { payload: "1" };
     const doGet = jest.fn().mockResolvedValue(payload);
     const httpAdapter = { doGet };
     const resource = new Resource({ endpoint, httpAdapter, querySerializer });
@@ -54,16 +54,16 @@ describe('query', () => {
     });
   });
 
-  test('should call fetcher without param', () => {
-    const queryObject = { name: '123' };
-    const endpoint = '/res';
-    const payload = { payload: '1' };
+  test("should call fetcher without param", () => {
+    const queryObject = { name: "123" };
+    const endpoint = "/res";
+    const payload = { payload: "1" };
     const doGet = jest.fn().mockResolvedValue(payload);
     const httpAdapter = { doGet };
     const resource = new Resource({
       endpoint,
       httpAdapter,
-      querySerializer: emptySerializer,
+      querySerializer: emptySerializer
     });
 
     return resource.query(queryObject).then(resResponse => {
@@ -73,16 +73,21 @@ describe('query', () => {
   });
 });
 
-describe('update', () => {
-  test('should delegate call to fetcher', async () => {
-    const endpoint = '/point';
-    const resourceName = 'name';
-    const id = '1';
-    const attrs = { name: '123' };
-    const payload = { any: 'data' };
+describe("update", () => {
+  test("should delegate call to fetcher", async () => {
+    const endpoint = "/point";
+    const resourceName = "name";
+    const id = "1";
+    const attrs = { name: "123" };
+    const payload = { any: "data" };
     const doPatch = jest.fn().mockResolvedValue(payload);
     const httpAdapter = { doPatch };
-    const resource = new Resource({ endpoint, httpAdapter, resourceName, querySerializer });
+    const resource = new Resource({
+      endpoint,
+      httpAdapter,
+      resourceName,
+      querySerializer
+    });
 
     expect(doPatch).toHaveBeenCalledTimes(0);
 
@@ -90,21 +95,26 @@ describe('update', () => {
 
     expect(doPatch).toHaveBeenCalledTimes(1);
     expect(doPatch).toHaveBeenCalledWith(endpoint, {
-      [resourceName]: [{ id, ...attrs }],
+      [resourceName]: [{ id, ...attrs }]
     });
     expect(result).toEqual(payload);
   });
 });
 
-describe('bulkUpdate', () => {
-  test('should delegate call to fetcher', async () => {
-    const endpoint = '/point';
-    const resourceName = 'name';
-    const items = [{ id: 1, name: 'John' }, { id: 2, name: 'Andrew' }];
-    const payload = { any: 'data' };
+describe("bulkUpdate", () => {
+  test("should delegate call to fetcher", async () => {
+    const endpoint = "/point";
+    const resourceName = "name";
+    const items = [{ id: 1, name: "John" }, { id: 2, name: "Andrew" }];
+    const payload = { any: "data" };
     const doPatch = jest.fn().mockResolvedValue(payload);
     const httpAdapter = { doPatch };
-    const resource = new Resource({ endpoint, httpAdapter, resourceName, querySerializer });
+    const resource = new Resource({
+      endpoint,
+      httpAdapter,
+      resourceName,
+      querySerializer
+    });
 
     expect(doPatch).toHaveBeenCalledTimes(0);
 
@@ -112,21 +122,26 @@ describe('bulkUpdate', () => {
 
     expect(doPatch).toHaveBeenCalledTimes(1);
     expect(doPatch).toHaveBeenCalledWith(endpoint, {
-      [resourceName]: items,
+      [resourceName]: items
     });
     expect(result).toEqual(payload);
   });
 });
 
-describe('delete', () => {
-  test('should delegate call to fetcher', async () => {
-    const endpoint = '/point';
-    const resourceName = 'name';
-    const id = '1';
-    const payload = { any: 'data' };
+describe("delete", () => {
+  test("should delegate call to fetcher", async () => {
+    const endpoint = "/point";
+    const resourceName = "name";
+    const id = "1";
+    const payload = { any: "data" };
     const doDelete = jest.fn().mockResolvedValue(payload);
     const httpAdapter = { doDelete };
-    const resource = new Resource({ endpoint, httpAdapter, resourceName, querySerializer });
+    const resource = new Resource({
+      endpoint,
+      httpAdapter,
+      resourceName,
+      querySerializer
+    });
 
     expect(doDelete).toHaveBeenCalledTimes(0);
 
@@ -138,14 +153,14 @@ describe('delete', () => {
   });
 });
 
-describe('getResourceItems', () => {
-  test('should get resource items from response', () => {
-    const endpoint = '/point';
-    const resourceName = 'resource';
+describe("getResourceItems", () => {
+  test("should get resource items from response", () => {
+    const endpoint = "/point";
+    const resourceName = "resource";
     const resource = new Resource({ endpoint, resourceName, querySerializer });
     const response = {
       resource: [1, 2, 3],
-      anotherResource: [4, 5],
+      anotherResource: [4, 5]
     };
 
     expect(resource.getResourceItems(response)).toEqual([1, 2, 3]);
