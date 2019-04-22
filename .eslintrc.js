@@ -5,7 +5,16 @@ module.exports = {
   parserOptions: {
     sourceType: 'module',
   },
+  env: {
+    node: true,
+  },
   overrides: [
+    {
+      files: ['src/**/*.js'],
+      env: {
+        node: false,
+      },
+    },
     {
       files: ['**/*.test.js'],
       env: {
