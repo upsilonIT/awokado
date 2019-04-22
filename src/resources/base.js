@@ -1,11 +1,11 @@
 const addParams = string => string ? `?${string}` : string;
 
 class Resource {
-  constructor({ endpoint, httpAdapter, resourceName, serializer }) {
+  constructor({ endpoint, httpAdapter, resourceName, querySerializer }) {
     this.endpoint = endpoint;
     this.httpAdapter = httpAdapter;
     this.resourceName = resourceName;
-    this.serializer = serializer;
+    this.querySerializer = querySerializer;
   }
 
   findById(id, options = {}) {
@@ -23,8 +23,8 @@ class Resource {
   }
 
   query(query) {
-    const { endpoint, httpAdapter, serializer } = this;
-    const queryParams = serializer.serialize(query);
+    const { endpoint, httpAdapter, querySerializer } = this;
+    const queryParams = querySerializer.serialize(query);
     const queryParamsStr = decodeURIComponent(queryParams.toString());
     const url = `${endpoint}${addParams(queryParamsStr)}`;
 

@@ -1,7 +1,7 @@
 import Resource from '../base';
 
 const queryParamsString = 'a=1&b=2';
-const serializer = {
+const querySerializer = {
   serialize: () => queryParamsString,
 };
 const emptySerializer = {
@@ -15,7 +15,7 @@ describe('findById', () => {
     const payload = { items: [] };
     const doGet = jest.fn().mockResolvedValue(payload);
     const httpAdapter = { doGet };
-    const resource = new Resource({ endpoint, httpAdapter, serializer });
+    const resource = new Resource({ endpoint, httpAdapter, querySerializer });
 
     return resource.findById(id).then(resResponse => {
       expect(doGet).toHaveBeenCalledWith(`${endpoint}/${id}`);
@@ -30,7 +30,7 @@ describe('findById', () => {
     const payload = { items: [] };
     const doGet = jest.fn().mockResolvedValue(payload);
     const httpAdapter = { doGet };
-    const resource = new Resource({ endpoint, httpAdapter, serializer });
+    const resource = new Resource({ endpoint, httpAdapter, querySerializer });
 
     return resource.findById(id, options).then(resResponse => {
       expect(doGet).toHaveBeenCalledWith(`${endpoint}/${id}?include=brands`);
@@ -46,7 +46,7 @@ describe('query', () => {
     const payload = { payload: '1' };
     const doGet = jest.fn().mockResolvedValue(payload);
     const httpAdapter = { doGet };
-    const resource = new Resource({ endpoint, httpAdapter, serializer });
+    const resource = new Resource({ endpoint, httpAdapter, querySerializer });
 
     return resource.query(queryObject).then(resResponse => {
       expect(doGet).toHaveBeenCalledWith(`${endpoint}?${queryParamsString}`);
@@ -63,7 +63,7 @@ describe('query', () => {
     const resource = new Resource({
       endpoint,
       httpAdapter,
-      serializer: emptySerializer,
+      querySerializer: emptySerializer,
     });
 
     return resource.query(queryObject).then(resResponse => {
@@ -82,7 +82,7 @@ describe('update', () => {
     const payload = { any: 'data' };
     const doPatch = jest.fn().mockResolvedValue(payload);
     const httpAdapter = { doPatch };
-    const resource = new Resource({ endpoint, httpAdapter, resourceName, serializer });
+    const resource = new Resource({ endpoint, httpAdapter, resourceName, querySerializer });
 
     expect(doPatch).toHaveBeenCalledTimes(0);
 
@@ -104,7 +104,7 @@ describe('bulkUpdate', () => {
     const payload = { any: 'data' };
     const doPatch = jest.fn().mockResolvedValue(payload);
     const httpAdapter = { doPatch };
-    const resource = new Resource({ endpoint, httpAdapter, resourceName, serializer });
+    const resource = new Resource({ endpoint, httpAdapter, resourceName, querySerializer });
 
     expect(doPatch).toHaveBeenCalledTimes(0);
 
@@ -126,7 +126,7 @@ describe('delete', () => {
     const payload = { any: 'data' };
     const doDelete = jest.fn().mockResolvedValue(payload);
     const httpAdapter = { doDelete };
-    const resource = new Resource({ endpoint, httpAdapter, resourceName, serializer });
+    const resource = new Resource({ endpoint, httpAdapter, resourceName, querySerializer });
 
     expect(doDelete).toHaveBeenCalledTimes(0);
 
@@ -142,7 +142,7 @@ describe('getResourceItems', () => {
   test('should get resource items from response', () => {
     const endpoint = '/point';
     const resourceName = 'resource';
-    const resource = new Resource({ endpoint, resourceName, serializer });
+    const resource = new Resource({ endpoint, resourceName, querySerializer });
     const response = {
       resource: [1, 2, 3],
       anotherResource: [4, 5],
