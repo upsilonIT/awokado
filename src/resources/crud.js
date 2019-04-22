@@ -1,11 +1,7 @@
-import Resource from './base';
-
 const addParams = string => string ? `?${string}` : string;
 
-class CRUDResource extends Resource {
+class CRUDResource {
   constructor({ endpoint, httpAdapter, resourceName, serializer }) {
-    super();
-
     this.endpoint = endpoint;
     this.httpAdapter = httpAdapter;
     this.resourceName = resourceName;
