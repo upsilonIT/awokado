@@ -1,6 +1,6 @@
 const addParams = string => string ? `?${string}` : string;
 
-class CRUDResource {
+class Resource {
   constructor({ endpoint, httpAdapter, resourceName, serializer }) {
     this.endpoint = endpoint;
     this.httpAdapter = httpAdapter;
@@ -74,4 +74,4 @@ class CRUDResource {
   }
 }
 
-export default CRUDResource;
+export default Resource;

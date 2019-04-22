@@ -1,1 +1,1 @@
-export { default as CRUDResource } from './resources/crud';
+export { default as Resource } from './resources/base';
