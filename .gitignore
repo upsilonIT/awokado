@@ -1,5 +1,7 @@
 # Awokado
-lib
+/resources
+/structs
+/index.js
 
 # Node.js
 node_modules
