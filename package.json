@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "babel src --out-dir .",
-    "clean": "rm -rf resources structs index.js",
+    "clean": "rm -rf query-dsl resources structs index.js",
     "commit": "git-cz",
     "lint": "eslint src",
     "prebuild": "yarn clean",
@@ -13,6 +13,7 @@
     "test": "yarn lint && jest src"
   },
   "files": [
+    "query-dsl",
     "resources",
     "structs"
   ],
