@@ -15,5 +15,14 @@ module.exports = {
   ],
   plugins: [
     '@babel/plugin-proposal-class-properties',
+    [
+      'babel-plugin-transform-imports',
+      {
+        ramda: {
+          transform: 'ramda/src/${member}',
+          preventFullImport: true,
+        },
+      },
+    ]
   ],
 };
