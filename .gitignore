@@ -1,6 +1,7 @@
 # Awokado
 /query-dsl
 /resources
+/serializers
 /structs
 /index.js
 
