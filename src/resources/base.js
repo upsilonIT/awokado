@@ -16,8 +16,9 @@ class Resource {
     if (include) {
       params.set("include", include);
     }
-
-    const url = `${endpoint}/${id}${addParams(params.toString())}`;
+    
+    const queryParamsStr = decodeURIComponent(params.toString());
+    const url = `${endpoint}/${id}${addParams(queryParamsStr)}`;
 
     return httpAdapter
       .doGet(url)
