@@ -16,7 +16,6 @@ class Resource {
     if (include) {
       params.set("include", include);
     }
-    
     const queryParamsStr = decodeURIComponent(params.toString());
     const url = `${endpoint}/${id}${addParams(queryParamsStr)}`;
 
